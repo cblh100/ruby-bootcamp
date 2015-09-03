@@ -1,8 +1,11 @@
 require 'ostruct'
+require 'pry'
 
 def create_person firstname, surname, claim_to_fame
   OpenStruct.new(firstname:  firstname, surname: surname, claim_to_fame: claim_to_fame)
 end
+
+binding.pry
 
 john = create_person('John', 'Mair', 'Creator of Pry')
 david = create_person('David', 'Rodriguez', 'Creator of pry-byebug')

@@ -1,12 +1,12 @@
 prices = {
-  'orange' => 10,
-  'apple' => 20,
-  'bread' => 100,
-  'tomato' => 25,
-  'cereal' => 234
-}
+      'orange' => 10,
+      'apple' => 20,
+      'bread' => 100,
+      'tomato' => 25,
+      'cereal' => 234
+} 
 
-shopping_list = <<-LIST
+shopping_list=<<LIST
  list
  orange
  apple
@@ -19,6 +19,11 @@ shopping_list = <<-LIST
  tomato
 LIST
 
-# Given the following price list and shopping
-# list print out the total cost of the shopping
-# list in pounds and pence
+=begin
+Given the following price list and shopping list print out the total cost of 
+the shopping list in pounds and pence
+=end
+
+cost = shopping_list.split.map { |item| prices[item] or 0 }.reduce(:+)
+
+puts "The price of the shopping list is: £#{'%.2f' % cost}."

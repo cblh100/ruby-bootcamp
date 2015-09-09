@@ -1,8 +1,12 @@
 require 'ostruct'
 require 'pry'
 
-def create_person firstname, surname, claim_to_fame
-  OpenStruct.new(firstname:  firstname, surname: surname, claim_to_fame: claim_to_fame)
+def create_person(firstname, surname, claim_to_fame)
+  OpenStruct.new(
+    firstname: firstname,
+    surname: surname,
+    claim_to_fame: claim_to_fame
+  )
 end
 
 binding.pry

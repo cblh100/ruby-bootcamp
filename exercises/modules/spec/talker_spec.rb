@@ -1,12 +1,12 @@
 require 'spec_helper'
 
+GREETINGS = ['hello', 'good day', "what's up", 'yo', 'hi', 'sup', 'hey']
+GOODBYES = ['goodbye', 'see you later', 'in a while crocodile', 'l8rs', 'bye for now']
+
 shared_examples 'a talker' do
 
   let(:name) { 'Mr Chatty' }
   let(:talker) { described_class.new(name) }
-
-  GREETINGS = ['hello', 'good day', "what's up", 'yo', 'hi', 'sup', 'hey']
-  GOODBYES = ['goodbye', 'see you later', 'in a while crocodile', 'l8rs', 'bye for now']
 
   it 'is a talker' do
     expect(talker).to be_kind_of(RubyBootcamp::Modules::Talker)

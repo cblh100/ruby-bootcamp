@@ -26,7 +26,7 @@ module Linguine
 
 end
 
-#Fudge to get round the loss of the each methos the String class
+#Fudge to get round the loss of the each method on the String class
 class String
   alias_method :each, :each_line
 end

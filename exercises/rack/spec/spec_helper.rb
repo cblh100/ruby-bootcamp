@@ -1,5 +1,6 @@
 require 'linguine'
 require 'oauth'
+require 'ms_translator'
 require 'webmock/rspec'
 require 'timecop'
 

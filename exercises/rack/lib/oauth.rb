@@ -17,7 +17,7 @@ class OAuth
   end
 
   def token
-    return @access_token if expires_at > Time.now
+    return @access_token if expires_at > Time.now #TODO: Should I include a margin of error (i.e. 10 secs?)
     get_new_token
   end
 

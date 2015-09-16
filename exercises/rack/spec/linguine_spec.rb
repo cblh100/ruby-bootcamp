@@ -11,12 +11,12 @@ describe Linguine do
       expect(linguine_class.mappings).to be_empty
     end
 
-    it 'store and call block' do
-      linguine_class.page '/' do
-        'Dummy Output'
-      end
+    it 'stores a page' do
+      page = double()
+
+      linguine_class.page '/', page
       expect(linguine_class.mappings).to include('/')
-      expect(linguine_class.mappings['/'].call).to eq('Dummy Output')
+      expect(linguine_class.mappings['/']).to eq(page)
     end
 
   end
@@ -60,6 +60,40 @@ describe Linguine do
       linguine_object.add_to_cache( 'hello world 2', 'fr', 'bonjour le monde 2' )
       expect(linguine_object.cache).to eq({ 'hello world 1' => { 'de' => 'hallo welt 1' }, 'hello world 2' => {  'fr' => 'bonjour le monde 2' } })
     end
+  end
+
+  describe '#translate_html' do
+
+    it 'translates all text in the html' do
+
+      html = <<-HTML
+        <html>
+          <head>
+            <title>Home</title>
+          </head>
+          <body>
+            <h1>Home</h1>
+            <p>The site of shiny stuff</p>
+          </body>
+        </html>
+      HTML
+
+      translated_html = <<-HTML
+        <html>
+          <head>
+            <title>text</title>
+          </head>
+          <body>
+            <h1>text</h1>
+            <p>text</p>
+          </body>
+        </html>
+      HTML
+
+      allow(linguine_object).to receive(:translate).and_return('text')
+      expect(linguine_object.translate_html(html, 'de')).to eq(translated_html)
+    end
+
   end
 
   describe '#translate' do

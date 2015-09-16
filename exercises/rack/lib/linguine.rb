@@ -1,5 +1,6 @@
 require 'rack'
 require 'pry'
+require 'nokogiri'
 require_relative 'oauth'
 require_relative 'ms_translator'
 
@@ -15,8 +16,8 @@ module Linguine
       @mappings ||= {}
     end
 
-    def page(uri, &block)
-      mappings[uri] = block
+    def page(uri, page)
+      mappings[uri] = page
     end
 
   end
@@ -46,10 +47,23 @@ module Linguine
     mappings = self.class::mappings
     return [404, {'Content-Type' => 'text/plain'}, 'Oooops, there is nothing here' ] unless mappings[request_path]
 
-    response_body = translate(mappings[request_path].call(env), language)
+    page = mappings[request_path].new(env)
 
-    [200, {'Content-Type' => 'text/plain'}, response_body]
+    response_body = case page.content_type
+                      when 'text/html' then translate_html(page.body, language)
+                      when 'text/plain' then translate(page.body, language)
+                      else page.body #Don't translate
+                    end
+
+    [200, {'Content-Type' => page.content_type}, response_body]
   end
+
+  def translate_html(html_text, language)
+    html = Nokogiri::HTML(html_text)
+    #TODO: Need to do something here, not sure what!!
+    html.to_s
+  end
+
 
   def translate(text, language)
     return cache[text][language] if cache[text] && cache[text][language]

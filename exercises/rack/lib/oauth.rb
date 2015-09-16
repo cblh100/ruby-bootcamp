@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'faraday'
 
 class OAuth
 
@@ -22,16 +23,17 @@ class OAuth
   end
 
   def get_new_token
-    url = URI(OAUTH_URI)
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    #http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-    request = Net::HTTP::Post.new(url)
-    request.body = URI.encode_www_form( { 'client_id' => client_id, 'client_secret' => client_secret, 'scope' => SCOPE, 'grant_type' => GRANT_TYPE } )
-    response = http.request(request)
+    conn = Faraday.new(:url => OAUTH_URI) do |faraday|
+      faraday.request :url_encoded
+      faraday.adapter Faraday.default_adapter
+    end
 
-    parsed_response = JSON.parse(response.read_body)
+    response = conn.post do |req|
+      req.body = { 'client_id' => client_id, 'client_secret' => client_secret, 'scope' => SCOPE, 'grant_type' => GRANT_TYPE }
+    end
+
+    parsed_response = JSON.parse(response.body)
 
     @access_token = parsed_response['access_token']
     @expires_at = Time.now + parsed_response['expires_in'].to_i

@@ -62,7 +62,7 @@ describe OAuth do
       end
 
       expect(WebMock).to have_requested(:post, oauth_uri).
-          with(:body => "client_id=test_client_id&client_secret=test_client_secret&scope=http%3A%2F%2Fapi.microsofttranslator.com%2F&grant_type=client_credentials")
+          with(:body => "client_id=test_client_id&client_secret=test_client_secret&grant_type=client_credentials&scope=http%3A%2F%2Fapi.microsofttranslator.com%2F")
 
     end
 

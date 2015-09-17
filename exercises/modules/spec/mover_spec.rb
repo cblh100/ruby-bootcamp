@@ -33,6 +33,12 @@ shared_examples 'a mover' do
     end
   end
 
+  describe '#move' do
+    it 'raises an InvalidDirectionException for unrecognised moves' do
+      expect { mover.move(:foo) }.to raise_error(RubyBootcamp::Modules::Mover::InvalidDirectionException, "I just don't move like that")
+    end
+  end
+
 end
 
 describe RubyBootcamp::Modules::Person do

@@ -5,9 +5,9 @@ module RubyBootcamp
       def move(direction)
         plane,amount = nil, nil
         if  %i{left right}.include?(direction)
-        plane, amount = :lattitude, (direction == :left ? 1 : -1)
-        elsif %i{forwards backwards}
-        plane, amount = :logitude, (direction == :forwards ? 1 : -1)
+          plane, amount = :lattitude, (direction == :left ? 1 : -1)
+        elsif %i{forwards backwards}.include?(direction)
+          plane, amount = :logitude, (direction == :forwards ? 1 : -1)
         else
           raise InvalidDirectionException, "I just don't move like that"
         end
@@ -32,6 +32,8 @@ module RubyBootcamp
         move :backwards
       end
 
+      class InvalidDirectionException < StandardError
+      end
     end
   end
 end

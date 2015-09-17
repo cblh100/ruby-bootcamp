@@ -24,6 +24,8 @@ Given the following price list and shopping list print out the total cost of
 the shopping list in pounds and pence
 =end
 
-cost = shopping_list.split.map { |item| prices[item] or 0 }.reduce(:+)
+prices.default = 0
+
+cost = shopping_list.split.map { |item| prices[item] }.reduce(:+)
 
 puts "The price of the shopping list is: £#{'%.2f' % cost}."

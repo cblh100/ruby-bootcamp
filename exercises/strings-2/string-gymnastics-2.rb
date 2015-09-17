@@ -20,12 +20,11 @@ the shopping list in pounds and pence
 =end 
 
 prices = Hash[*price_list.split.reject { |it| it == '=' }]
-#binding.pry
 
 prices.each { |k,v|
-  prices[k] = ( /^(\d+)p$/.match(v) { |m| m[1].to_i } or
-                /^£(\d+).(\d+)$/.match(v) { |m| (m[1].to_i * 100) + m[2].to_i } or
-                0 )
+  prices[k] = /^((?<pence>\d+)p)|(£(?<pounds>\d+).(?<pence>\d+))$/.match(v) do |m|
+    m['pence'].to_i + ( (m['pounds'].to_i || 0) * 100 )
+  end
 }
 
 cost = shopping_list.split.map { |item| prices[item] or 0 }.reduce(:+)

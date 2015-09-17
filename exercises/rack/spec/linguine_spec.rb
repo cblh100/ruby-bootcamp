@@ -64,28 +64,40 @@ describe Linguine do
 
   describe '#translate_html' do
 
-    it 'translates all text in the html' do
+    it 'translates all text nodes in the html' do
 
-      html = <<-HTML
+      html = <<-HTML.gsub(/^[ ]{8}/, '')
         <html>
           <head>
             <title>Home</title>
           </head>
           <body>
-            <h1>Home</h1>
-            <p>The site of shiny stuff</p>
+            <h1>header 1</h1>
+            <h2>header 2</h2>
+            <h3>header 3</h3>
+            <h4>header 4</h4>
+            <h5>header 5</h5>
+            <h6>header 6</h6>
+            <p>The site of shiny stuff <a href="#">click me!</a>. this is fun!</p>
           </body>
         </html>
       HTML
 
-      translated_html = <<-HTML
+      translated_html = <<-HTML.gsub(/^[ ]{8}/, '')
+        <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
         <html>
           <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>text</title>
           </head>
           <body>
             <h1>text</h1>
-            <p>text</p>
+            <h2>text</h2>
+            <h3>text</h3>
+            <h4>text</h4>
+            <h5>text</h5>
+            <h6>text</h6>
+            <p>text<a href="#">text</a>text</p>
           </body>
         </html>
       HTML
@@ -97,11 +109,18 @@ describe Linguine do
   end
 
   describe '#translate' do
-    context 'translation is already in the cache' do
-      let(:text_to_translate) { 'hello world' }
-      let(:translated_text) { 'hallo welt (from the cache)' }
-      let(:language) { 'de' }
 
+    let(:text_to_translate) { 'hello world' }
+    let(:translated_text) { 'bonjour le monde' }
+    let(:language) { 'fr' }
+
+    let(:translator) do
+      translator = double()
+      allow(translator).to receive(:translate).and_return(translated_text)
+      translator
+    end
+
+    context 'translation is already in the cache' do
       it 'the cached value is returned' do
         linguine_object.add_to_cache(text_to_translate, language, translated_text)
         allow(linguine_object).to receive(:translator)
@@ -111,12 +130,7 @@ describe Linguine do
     end
 
     context 'translation text is already in the cache but not for this language' do
-      let(:text_to_translate) { 'hello world' }
-      let(:translated_text) { 'bonjour le monde' }
-
       it 'the translated value is returned' do
-        translator = double()
-        allow(translator).to receive(:translate).and_return(translated_text)
         linguine_object.add_to_cache(text_to_translate, 'de', 'hallo welt')
         allow(linguine_object).to receive(:translator).and_return(translator)
         expect(linguine_object.translate(text_to_translate, 'fr')). to eq(translated_text)
@@ -124,13 +138,7 @@ describe Linguine do
     end
 
     context 'translation text is not in the cache' do
-      let(:text_to_translate) { 'hello world' }
-      let(:translated_text) { 'bonjour le monde' }
-      let(:language) { 'fr' }
-
       it 'the translated value is returned' do
-        translator = double()
-        allow(translator).to receive(:translate).and_return(translated_text)
         allow(linguine_object).to receive(:translator).and_return(translator)
         expect(linguine_object.translate(text_to_translate, language)). to eq(translated_text)
         expect(linguine_object.cache).to eq({ text_to_translate => { language => translated_text } })
@@ -141,7 +149,53 @@ describe Linguine do
 
   describe '#call' do
 
+    let(:env) { {'REQUEST_PATH' => '/mock.de'} }
+    let(:translator) do
+      translator = double()
+      allow(translator).to receive(:translate).and_return('My german mock body')
+      translator
+    end
 
+    it 'page not found' do
+      expect(linguine_object.call(env)).to eq([404, {'Content-Type' => 'text/plain'}, 'Oooops, there is nothing here' ])
+    end
+
+    it 'translates a plain text page' do
+      class PlainTextPage < Page
+        def content_type
+          'text/plain'
+        end
+        def body
+          'My mock body'
+        end
+      end
+
+      allow(linguine_object).to receive(:translator).and_return(translator)
+
+      linguine_class::page('/mock', PlainTextPage )
+      expect(linguine_object.call(env)).to eq([200, {'Content-Type' => 'text/plain'}, 'My german mock body' ])
+    end
+
+    it 'translates a html page' do
+      class HtmlPage < Page
+        def content_type
+          'text/html'
+        end
+        def body
+          '<html><body><p>My mock body</p></body></html>'
+        end
+      end
+
+      expected_html = <<-HTML.gsub(/^[ ]{8}/, '')
+        <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd\">
+        <html><body><p>My german mock body</p></body></html>
+      HTML
+
+      allow(linguine_object).to receive(:translator).and_return(translator)
+
+      linguine_class::page('/mock', HtmlPage )
+      expect(linguine_object.call(env)).to eq([200, {'Content-Type' => 'text/html'}, expected_html ])
+    end
 
   end
 

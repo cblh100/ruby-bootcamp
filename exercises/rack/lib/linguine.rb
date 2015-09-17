@@ -58,9 +58,16 @@ module Linguine
     [200, {'Content-Type' => page.content_type}, response_body]
   end
 
+  TRANSLATABLE_TAGS = %w(title p a h1 h2 h3 h4 h5 h6)
+
   def translate_html(html_text, language)
     html = Nokogiri::HTML(html_text)
-    #TODO: Need to do something here, not sure what!!
+    TRANSLATABLE_TAGS.each do |tag|
+      html.css(tag).each do |node|
+        text_nodes = node.children.select { |it| it.text? }
+        text_nodes.each { |text| text.content = translate( text.content, language ) }
+      end
+    end
     html.to_s
   end
 

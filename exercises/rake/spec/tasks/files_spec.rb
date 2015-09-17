@@ -21,8 +21,7 @@ describe 'files:list' do
   let(:temp_directory) { Dir.mktmpdir }
 
   before do
-    #FileUtils.touch
-    for i in 1..4
+    4.times do |i|
       File.open("#{temp_directory}#{File::SEPARATOR}file#{i}.#{i%2 == 0 ? 'csv' : 'txt'}", "w") {}
     end
   end
@@ -36,7 +35,7 @@ describe 'files:list' do
   end
 
   it 'lists all files in a directory' do
-    expect { subject.invoke(temp_directory) }.to output("file1.txt\nfile2.csv\nfile3.txt\nfile4.csv\n").to_stdout
+    expect { subject.invoke(temp_directory) }.to output("file0.csv\nfile1.txt\nfile2.csv\nfile3.txt\n").to_stdout
 
   end
 

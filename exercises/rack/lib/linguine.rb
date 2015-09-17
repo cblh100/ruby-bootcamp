@@ -22,11 +22,8 @@ module Linguine
 
   end
 
-  def oauth
-    @oauth ||= OAuth.new('ddWDU0TuNZyoiAWtuhQn','Aez85ARdCZVpcKEKgOXOqBpai3SELO43MxdtI1Ml4KQ=')
-  end
-
   def translator
+    oauth = OAuth.new('ddWDU0TuNZyoiAWtuhQn','Aez85ARdCZVpcKEKgOXOqBpai3SELO43MxdtI1Ml4KQ=')
     @translator ||= MsTranslator.new(oauth)
   end
 

@@ -8,3 +8,5 @@ gem 'webmock'
 gem 'timecop'
 gem 'nokogiri'
 gem 'faraday'
+gem 'google-translate'
+

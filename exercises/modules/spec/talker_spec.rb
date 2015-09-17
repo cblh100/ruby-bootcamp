@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-GREETINGS = ['hello', 'good day', "what's up", 'yo', 'hi', 'sup', 'hey']
-GOODBYES = ['goodbye', 'see you later', 'in a while crocodile', 'l8rs', 'bye for now']
-
 shared_examples 'a talker' do
 
   let(:name) { 'Mr Chatty' }
   let(:talker) { described_class.new(name) }
+
+  let(:greetings) { ['hello', 'good day', "what's up", 'yo', 'hi', 'sup', 'hey'] }
+  let(:goodbyes) { ['goodbye', 'see you later', 'in a while crocodile', 'l8rs', 'bye for now'] }
 
   it 'is a talker' do
     expect(talker).to be_kind_of(RubyBootcamp::Modules::Talker)
@@ -26,13 +26,13 @@ shared_examples 'a talker' do
 
   describe '#greeting' do
     it 'returns a random greeting' do
-      expect(talker.greeting).to satisfy { |word| GREETINGS.include? word }
+      expect(talker.greeting).to satisfy { |word| greetings.include? word }
     end
   end
 
   describe '#farewell' do
     it 'returns a random farewell' do
-      expect(talker.farewell).to satisfy { |word| GOODBYES.include? word }
+      expect(talker.farewell).to satisfy { |word| goodbyes.include? word }
     end
   end
 

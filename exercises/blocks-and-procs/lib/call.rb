@@ -8,19 +8,13 @@ class Call
     instance_eval &block
   end
 
-  def date(date = nil)
-    return @date unless date
-    @date = date
-  end
+  VALID_ATTRIBUTES = %w(date duration cost)
 
-  def duration(duration = nil)
-    return @duration unless duration
-    @duration = duration
-  end
-
-  def cost(cost = nil)
-    return @cost unless cost
-    @cost = cost
+  VALID_ATTRIBUTES.each do |name|
+    define_method(name) do |value = nil|
+      return instance_variable_get("@#{name}") unless value
+      instance_variable_set("@#{name}", value)
+    end
   end
 
 end

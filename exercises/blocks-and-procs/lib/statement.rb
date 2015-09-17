@@ -4,32 +4,19 @@ class Statement
 
   def initialize(&block)
     raise ArgumentError, 'You must pass a block to initialize the Statement' if !block_given?
+
+
+
     instance_eval &block
   end
 
-  def date(date = nil)
-    return @date unless date
-    @date = date
-  end
+  VALID_ATTRIBUTES = %w(date due from to total)
 
-  def due(due = nil)
-    return @due unless due
-    @due = due
-  end
-
-  def from(from = nil)
-    return @from unless from
-    @from = from
-  end
-
-  def to(to = nil)
-    return @to unless to
-    @to = to
-  end
-
-  def total(total = nil)
-    return @total unless total
-    @total = total
+  VALID_ATTRIBUTES.each do |name|
+    define_method(name) do |value = nil|
+      return instance_variable_get("@#{name}") unless value
+      instance_variable_set("@#{name}", value)
+    end
   end
 
   def call_charges(&block)

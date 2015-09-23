@@ -9,10 +9,25 @@ describe BillApp do
     described_class
   end
 
-  it "says hello" do
-    get '/'
+  let(:bill_uri) { '/' }
+
+  it 'needs authentication' do
+    get bill_uri
+    expect(last_response).to be_unauthorized
+    expect(last_response.header).to include('WWW-Authenticate' => 'Basic realm="Sky Bill"')
+  end
+
+  it 'fails with invalid credentials' do
+    authorize 'mrhacker', 'l33t'
+    get bill_uri
+    expect(last_response).to be_unauthorized
+  end
+
+  it 'valid credentials' do
+    authorize 'username', 'password'
+    get bill_uri
     expect(last_response).to be_ok
     expect(last_response.body).to eq('hello')
   end
-  
+
 end

@@ -7,3 +7,5 @@ gem 'sinatra'
 gem 'pry'
 
 gem 'rack-test'
+
+gem 'rubocop'

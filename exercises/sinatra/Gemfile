@@ -3,9 +3,10 @@ source "http://rubygems.org"
 
 gem 'rspec'
 gem 'sinatra'
+gem 'json'
+gem 'slim'
 
 gem 'pry'
 
 gem 'rack-test'
-
 gem 'rubocop'

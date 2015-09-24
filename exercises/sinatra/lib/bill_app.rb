@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'slim'
 
 class BillApp < Sinatra::Base
 
@@ -7,7 +8,7 @@ class BillApp < Sinatra::Base
   end
 
   get '/' do
-    'hello'
+    slim :index
   end
 
 end

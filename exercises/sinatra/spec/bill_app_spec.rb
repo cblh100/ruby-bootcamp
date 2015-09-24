@@ -1,6 +1,7 @@
 ENV['RACK_ENV'] = 'test'
 
 require 'spec_helper'
+require 'pry'
 
 describe BillApp do
   include Rack::Test::Methods
@@ -27,7 +28,7 @@ describe BillApp do
     authorize 'username', 'password'
     get bill_uri
     expect(last_response).to be_ok
-    expect(last_response.body).to eq('hello')
+    expect(last_response.body).to include('Sky Bill')
   end
 
 end

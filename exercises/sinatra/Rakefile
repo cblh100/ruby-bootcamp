@@ -1,7 +1,8 @@
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
+require 'cucumber/rake/task'
 
-task :default => [:spec, :rubocop]
+task :default => [:spec, :features, :rubocop]
 
 desc 'Run RSpec on the tests'
 RSpec::Core::RakeTask.new(:spec) do |t|
@@ -17,3 +18,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = false
 end
 
+Cucumber::Rake::Task.new(:features) do |t|
+  t.cucumber_opts = "--format pretty"
+end

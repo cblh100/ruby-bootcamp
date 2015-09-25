@@ -1,10 +1,12 @@
 require 'json'
+require 'recursive-open-struct'
 
 class BillService
 
   def fetch_bill
     file = File.read('bill.json')
-    JSON.parse(file)
+    json = JSON.parse(file)
+    RecursiveOpenStruct.new(json)
   end
 
 end

@@ -19,6 +19,7 @@ describe BillServiceApp do
   it 'returns a valid json bill' do
     get bill_uri
     expect(last_response).to be_ok
+    expect(last_response.header['Content-Type']).to include('application/json')
     expect(JSON.parse(last_response.body)).to eq(expected_json)
   end
 

@@ -32,12 +32,12 @@ Then(/^Then I should be able to view my bill$/) do
 end
 
 Given(/^I have logged in$/) do
-  steps %Q{
+  steps %(
     Given I go to the home page
     And I provide a username of username and a password of password
     And I click the Login button
     Then The page title should should be 'Sky Bill'
-  }
+  )
 end
 
 Then(/^I should see '(.+)'$/) do |word|
@@ -49,7 +49,7 @@ And(/^The page title should should be '(.+)'$/) do |title|
 end
 
 And(/^The page header is '(.+)'$/) do |header|
-  expect(page).to have_css('.page-header h1', text:'Sky Bill')
+  expect(page).to have_css('.page-header h1', text: header)
 end
 
 And(/^The bill total is '£(\d+\.\d{2})'$/) do |amount|

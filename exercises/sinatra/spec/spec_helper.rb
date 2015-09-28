@@ -1,4 +1,5 @@
 require 'rack/test'
+require 'webmock/rspec'
 
 require 'bill_app'
 require 'bill_service_app'

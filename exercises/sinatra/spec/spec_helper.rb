@@ -1,6 +1,7 @@
 require 'rack/test'
 
 require 'bill_app'
+require 'bill_service_app'
 require 'bill_service'
 require 'bill_helper'
 

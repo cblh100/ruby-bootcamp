@@ -1,4 +1,7 @@
+require 'attribute'
+
 class Call
+  extend Attribute
 
   attr_accessor :called
 
@@ -8,13 +11,6 @@ class Call
     instance_eval &block
   end
 
-  VALID_ATTRIBUTES = %w(date duration cost)
-
-  VALID_ATTRIBUTES.each do |name|
-    define_method(name) do |value = nil|
-      return instance_variable_get("@#{name}") unless value
-      instance_variable_set("@#{name}", value)
-    end
-  end
+  attribute :date, :duration, :cost
 
 end

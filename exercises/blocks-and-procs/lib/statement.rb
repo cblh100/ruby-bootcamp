@@ -1,23 +1,15 @@
 require 'json'
+require 'attribute'
 
 class Statement
+  extend Attribute
 
   def initialize(&block)
     raise ArgumentError, 'You must pass a block to initialize the Statement' if !block_given?
-
-
-
     instance_eval &block
   end
 
-  VALID_ATTRIBUTES = %w(date due from to total)
-
-  VALID_ATTRIBUTES.each do |name|
-    define_method(name) do |value = nil|
-      return instance_variable_get("@#{name}") unless value
-      instance_variable_set("@#{name}", value)
-    end
-  end
+  attribute :date, :due, :from, :to, :total
 
   def call_charges(&block)
     return @call_charges unless block_given?

@@ -1,0 +1,22 @@
+#storePanel.panel.panel-primary
+  .panel-heading
+    .row
+      .col-xs-9
+        h3.panel-title
+          a.nounderline data-toggle="collapse" href="#store"
+            span.glyphicon.glyphicon-menu-hamburger>
+            | Sky Store
+      .col-xs-3
+        h3.panel-title = format_currency(bill.skyStore.total)
+  #store.panel-collapse.collapse
+    .panel-body
+      h4 Rentals
+      - bill.skyStore.rentals.each do |item|
+        .row
+          .col-xs-9 = item.title
+          .col-xs-3 = format_currency(item.cost)
+      h4 Buy and Keep
+      - bill.skyStore.buyAndKeep.each do |item|
+        .row
+          .col-xs-9 = item.title
+          .col-xs-3 = format_currency(item.cost)

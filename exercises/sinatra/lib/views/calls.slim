@@ -1,0 +1,24 @@
+#callsPanel.panel.panel-primary
+  .panel-heading
+    .row
+      .col-xs-9
+        h3.panel-title
+          a.nounderline data-toggle="collapse" href="#calls"
+            span.glyphicon.glyphicon-menu-hamburger>
+            | Calls
+      .col-xs-3
+        h3.panel-title = format_currency(bill.callCharges.total)
+  #calls.panel-collapse.collapse
+    .panel-body
+      .row
+        .col-xs-4
+          h5 Number
+        .col-xs-5
+          h5 Duration
+        .col-xs-3
+          h5 Cost
+      - bill.callCharges.calls.each do |call_charge|
+        .row
+          .col-xs-4 = call_charge.called
+          .col-xs-5 = call_charge.duration
+          .col-xs-3 = format_currency call_charge.cost

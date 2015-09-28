@@ -1,0 +1,16 @@
+#packagesPanel.panel.panel-primary
+  .panel-heading
+    .row
+      .col-xs-9
+        h3.panel-title
+          a.nounderline data-toggle="collapse" href="#packages"
+            span.glyphicon.glyphicon-menu-hamburger>
+            | Packages
+      .col-xs-3
+        h3.panel-title = format_currency(bill.package.total)
+  #packages.panel-collapse.collapse
+    .panel-body
+      - bill.package.subscriptions.sort { |x,y| x.name <=> y.name }.each do |subscription|
+        .row
+          .col-xs-9 = subscription.name
+          .col-xs-3 = format_currency(subscription.cost)

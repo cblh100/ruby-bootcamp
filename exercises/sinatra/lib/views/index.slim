@@ -1,6 +1,29 @@
-doctype html
-html
-  head
-    title Sky Bill
-  body
-    h1 Hello
+.container
+  .page-header
+    h1 Sky Bill
+
+  .well
+    .row
+      .col-xs-4
+        | Period:
+      .col-xs-4
+        | Due By:
+      .col-xs-4
+        | Created:
+    .row
+      .col-xs-4 = "#{format_date(bill.statement.period.from)} - #{format_date(bill.statement.period.to)}"
+      .col-xs-4 = format_date bill.statement.due
+      .col-xs-4 = format_date bill.statement.generated
+
+  == slim :packages, locals: { bill: bill }
+
+  == slim :calls, locals: { bill: bill }
+
+  == slim :store, locals: { bill: bill }
+
+  .well
+    .row
+      .col-xs-9
+        h4 Total:
+      .col-xs-3
+        h4 = format_currency(bill.total)
